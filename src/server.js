@@ -84,71 +84,71 @@ const PORT = process.env.PORT || 3000;
 
 const start_server = async () => {
   try {
-    console.log('🚀 Starting ThirstyBird API...');
+    console.log('Starting ThirstyBird API...');
 
     // Validate environment configuration
-    console.log('🔍 Validating environment...');
+    console.log('Validating environment...');
     const { validated_env, warnings, is_production } = validate_environment();
     
     if (is_production) {
       validate_production_secrets();
-      console.log('✅ Production secrets validated');
+      console.log('Production secrets validated');
     }
     
     if (warnings.length > 0) {
-      console.log(`⚠️  ${warnings.length} environment warnings logged`);
+      console.log(`${warnings.length} environment warnings logged`);
     } else {
-      console.log('✅ Environment configuration valid');
+      console.log('Environment configuration valid');
     }
 
     // Test database connection
     const db_connected = await test_connection();
     if (!db_connected) {
-      console.error('❌ Database connection failed - exiting');
+      console.error('Database connection failed - exiting');
       process.exit(1);
     }
-    console.log('✅ Database connected');
+    console.log('Database connected');
 
     // Connect to Redis
     await connect_redis();
-    console.log('✅ Redis connected');
+    console.log('Redis connected');
 
     // Verify email service
     const email_verified = await email_service.verify_connection();
     if (email_verified) {
-      console.log('✅ Email service ready');
+      console.log('Email service ready');
     } else {
-      console.log('⚠️  Email service not configured (will use console logging)');
+      console.log('Email service not configured (will use console logging)');
     }
 
     // Start server
     server.listen(PORT, () => {
-      console.log(`🚀 ThirstyBird API running on port ${PORT}`);
-      console.log(`📱 Frontend: ${process.env.FRONTEND_URL}`);
-      console.log(`🏢 Portal: ${process.env.PORTAL_URL}`);
-      console.log(`🌍 Environment: ${process.env.NODE_ENV}`);
-      console.log(`🏗️  Architecture: 3-Layer (Controllers → Services → Models)`);
-      console.log(`📧 Email: ${email_verified ? 'Configured' : 'Development mode'}`);
+      console.log(`ThirstyBird API running on port ${PORT}`);
+      console.log(`Frontend: ${process.env.FRONTEND_URL}`);
+      console.log(`Portal: ${process.env.PORTAL_URL}`);
+      console.log(`Environment: ${process.env.NODE_ENV}`);
+      console.log(`Architecture: 3-Layer (Controllers → Services → Models)`);
+      console.log(`Email: ${email_verified ? 'Configured' : 'Development mode'}`);
       console.log('');
-      console.log('📋 Available endpoints:');
-      console.log('  🔐 /api/auth     - Authentication (register, login)');
-      console.log('  🏢 /api/venues   - Venue management');
-      console.log('  👤 /api/users    - User profiles');
-      console.log('  🎯 /api/deals    - Deal management');
-      console.log('  🎟️  /api/vouchers - Voucher system (with email delivery)');
-      console.log('  💳 /api/payments - Payment processing');
-      console.log('  ❤️  /health      - Health check');
+      console.log('Available endpoints:');
+      console.log('   /api/auth     - Authentication (register, login)');
+      console.log('   /api/venues   - Venue management');
+      console.log('   /api/users    - User profiles');
+      console.log('   /api/deals    - Deal management');
+      console.log('    /api/vouchers - Voucher system (with email delivery)');
+      console.log('   /api/payments - Payment processing');
+      console.log('    /health      - Health check');
     });
 
   } catch (error) {
-    console.error('❌ Server startup failed:', error);
+    console.error('Server startup failed:', error);
     process.exit(1);
   }
 };
 
 // Graceful shutdown
 process.on('SIGTERM', () => {
-  console.log('🛑 SIGTERM received, shutting down gracefully');
+  console.log('SIGTERM received, shutting down gracefully');
   server.close(() => {
     console.log('✅ Server closed');
     process.exit(0);

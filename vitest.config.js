@@ -30,7 +30,7 @@ export default defineConfig({
     hookTimeout: 10000,
     
     // Reporter settings  
-    reporters: ['default', 'html'],
+    reporters: ['verbose', 'html'],
     outputFile: {
       html: './test-results/index.html'
     },
@@ -47,7 +47,7 @@ export default defineConfig({
     
     // Coverage settings
     coverage: {
-      provider: 'c8',
+      provider: 'v8',
       reporter: ['text', 'html', 'lcov'],
       reportsDirectory: './coverage',
       include: [
