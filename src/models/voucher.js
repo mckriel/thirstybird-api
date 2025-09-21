@@ -47,7 +47,7 @@ export class VoucherModel {
 
     if (status) {
       params.push(status);
-      query += ` AND status = $${params.length}`;
+      query += ` AND status = $2`;
     }
 
     const result = await db.query(query, params);
@@ -128,16 +128,16 @@ export class VoucherModel {
   static async update_status(id, status, redeemed_by = null) {
     let query = `
       UPDATE vouchers 
-      SET status = $1, updated_at = CURRENT_TIMESTAMP
+      SET status = $2, updated_at = CURRENT_TIMESTAMP
     `;
-    const params = [status, id];
+    const params = [id, status];
 
     if (status === 'redeemed' && redeemed_by) {
       query += `, redeemed_at = CURRENT_TIMESTAMP, redeemed_by = $3`;
-      params.splice(2, 0, redeemed_by); // Insert at position 2
+      params.push(redeemed_by);
     }
 
-    query += ` WHERE id = $${params.length} RETURNING *`;
+    query += ` WHERE id = $1 RETURNING *`;
 
     const result = await db.query(query, params);
     return result.rows[0];

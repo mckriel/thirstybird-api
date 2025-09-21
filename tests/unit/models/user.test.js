@@ -1,13 +1,17 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { UserModel } from '../../../src/models/user.js';
-import { create_user_factory, create_admin_user_factory } from '../../helpers/factories.js';
 import bcrypt from 'bcryptjs';
 import { v4 as uuidv4 } from 'uuid';
 
 describe('UserModel', () => {
-  beforeEach(async () => {
-    // Clean users table specifically for this test
-    await test_utils.clean_tables(['users']);
+  beforeAll(async () => {
+    // Clean before this test file starts
+    await test_utils.clean_test_data();
+  });
+  
+  afterAll(async () => {
+    // Clean after this test file ends
+    await test_utils.clean_test_data();
   });
 
   describe('create', () => {

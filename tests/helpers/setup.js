@@ -21,32 +21,66 @@ try {
   process.exit(1);
 }
 
-// Clean and reset database state before each test
-beforeEach(async () => {
+// Simple cleanup function that can be called by individual test files
+const clean_test_data = async () => {
   if (!db_connected) return;
   
   try {
-    // Clean only test-generated data, keep base fixtures
     await db.query('BEGIN');
     
-    // Only delete data that might be created by tests (with test email patterns)
-    await db.query(`DELETE FROM refresh_tokens WHERE user_id IN (
-      SELECT id FROM users WHERE email LIKE '%test%'
-    )`);
-    await db.query(`DELETE FROM payments WHERE user_id IN (
-      SELECT id FROM users WHERE email LIKE '%test%'  
-    )`);
-    await db.query(`DELETE FROM vouchers WHERE user_id IN (
-      SELECT id FROM users WHERE email LIKE '%test%'
-    )`);
-    await db.query(`DELETE FROM deals WHERE venue_id IN (
-      SELECT id FROM venues WHERE email LIKE '%test%'
-    )`);
-    await db.query(`DELETE FROM venue_profiles WHERE venue_id IN (
-      SELECT id FROM venues WHERE email LIKE '%test%'
-    )`);
-    await db.query(`DELETE FROM venues WHERE email LIKE '%test%'`);
-    await db.query(`DELETE FROM users WHERE email LIKE '%test%'`);
+    // For unit tests, clean everything. For other tests, preserve seed data.
+    const is_unit_test = process.argv.some(arg => arg.includes('unit/models'));
+    
+    if (is_unit_test) {
+      // Clean everything for unit tests
+      await db.query('DELETE FROM refresh_tokens');
+      await db.query('DELETE FROM payments');
+      await db.query('DELETE FROM vouchers');
+      await db.query('DELETE FROM deals');
+      await db.query('DELETE FROM venue_profiles');
+      await db.query('DELETE FROM venues');
+      await db.query('DELETE FROM users');
+    } else {
+      // Clean test-generated data while preserving seed data for integration tests
+      const preserve_user_ids = [
+        '550e8400-e29b-41d4-a716-446655440001',
+        '550e8400-e29b-41d4-a716-446655440002', 
+        '550e8400-e29b-41d4-a716-446655440003',
+        '550e8400-e29b-41d4-a716-446655440004'
+      ];
+      
+      const preserve_venue_ids = [
+        '660e8400-e29b-41d4-a716-446655440001',
+        '660e8400-e29b-41d4-a716-446655440002',
+        '660e8400-e29b-41d4-a716-446655440003'
+      ];
+      
+      const preserve_deal_ids = [
+        '770e8400-e29b-41d4-a716-446655440001',
+        '770e8400-e29b-41d4-a716-446655440002',
+        '770e8400-e29b-41d4-a716-446655440003'
+      ];
+      
+      const preserve_voucher_ids = [
+        '880e8400-e29b-41d4-a716-446655440001',
+        '880e8400-e29b-41d4-a716-446655440002'
+      ];
+      
+      const preserve_payment_ids = [
+        '990e8400-e29b-41d4-a716-446655440001',
+        '990e8400-e29b-41d4-a716-446655440002'
+      ];
+      
+      // Clean in reverse dependency order, excluding seed data
+      await db.query('DELETE FROM refresh_tokens WHERE user_id NOT IN ($1, $2, $3, $4)', preserve_user_ids);
+      await db.query('DELETE FROM payments WHERE id NOT IN ($1, $2)', preserve_payment_ids);
+      await db.query('DELETE FROM vouchers WHERE id NOT IN ($1, $2)', preserve_voucher_ids);
+      await db.query('DELETE FROM deals WHERE id NOT IN ($1, $2, $3)', preserve_deal_ids);
+      await db.query('DELETE FROM venue_profiles WHERE user_id NOT IN ($1, $2, $3, $4) OR venue_id NOT IN ($5, $6, $7)', 
+        [...preserve_user_ids, ...preserve_venue_ids]);
+      await db.query('DELETE FROM venues WHERE id NOT IN ($1, $2, $3)', preserve_venue_ids);
+      await db.query('DELETE FROM users WHERE id NOT IN ($1, $2, $3, $4)', preserve_user_ids);
+    }
     
     await db.query('COMMIT');
     
@@ -55,7 +89,7 @@ beforeEach(async () => {
     console.error('❌ Test setup error:', error);
     throw error;
   }
-});
+};
 
 // Cleanup any hanging transactions after each test
 afterEach(async () => {
@@ -89,6 +123,9 @@ export const test_utils = {
       await db.query(`DELETE FROM ${table}`);
     }
   },
+  
+  // Clean test data while preserving seeds  
+  clean_test_data,
   
   // Get current database state
   get_table_count: async (table) => {

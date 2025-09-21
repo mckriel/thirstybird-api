@@ -82,9 +82,20 @@ export default defineConfig({
       }
     },
     
-    // Parallel execution
-    threads: true,
-    maxThreads: 4,
+    // Run tests completely sequentially - one file at a time
+    threads: false,
+    fileParallelism: false,
+    pool: 'forks',
+    poolOptions: {
+      forks: {
+        singleFork: true,
+        isolate: true
+      }
+    },
+    sequence: {
+      concurrent: false,
+      shuffle: false
+    },
     
     // Watch mode settings (enabled for UI)
     watch: true,

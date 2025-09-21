@@ -46,14 +46,19 @@ export async function setup() {
     console.log('⚡ Running migrations...');
     await run_migrations();
     
-    // Load base test data from safe seed file using db connection
-    console.log('🌱 Loading base test fixtures...');
-    const safe_seed_path = path.join(__dirname, '../../database/seeds/001_test_data_safe.sql');
-    const seed_sql = fs.readFileSync(safe_seed_path, 'utf8');
-    
-    // Import db connection which is already configured for test environment
-    const { db } = await import('../../src/database/connection.js');
-    await db.query(seed_sql);
+    // Only load seed data for non-unit tests (validation tests need seed data)
+    const test_files = process.argv.slice(2).join(' ');
+    if (test_files.includes('validation') || !test_files.includes('unit')) {
+      console.log('🌱 Loading base test fixtures...');
+      const safe_seed_path = path.join(__dirname, '../../database/seeds/001_test_data_safe.sql');
+      const seed_sql = fs.readFileSync(safe_seed_path, 'utf8');
+      
+      // Import db connection which is already configured for test environment
+      const { db } = await import('../../src/database/connection.js');
+      await db.query(seed_sql);
+    } else {
+      console.log('🧪 Unit tests - skipping seed data loading');
+    }
     
     console.log('✅ Test environment setup complete');
     
