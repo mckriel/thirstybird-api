@@ -1,0 +1,53 @@
+# Dependencies
+node_modules/
+.pnpm-debug.log*
+
+# Environment files
+.env
+.env.local
+.env.production
+.env.staging
+
+# Keep test environment file for reference
+# .env.test
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+
+# Test results and reports (keep HTML reports for viewing)
+# test-results/
+*.lcov
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Editor directories and files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Temporary files
+tmp/
+temp/

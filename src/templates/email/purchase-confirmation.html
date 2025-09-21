@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Purchase Confirmation - ThirstyBird</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background: linear-gradient(135deg, #007bff 0%, #6610f2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            border-radius: 8px 8px 0 0;
+        }
+        .content {
+            background: #f9f9f9;
+            padding: 30px;
+            border-radius: 0 0 8px 8px;
+        }
+        .order-summary {
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+        .order-id {
+            font-size: 18px;
+            font-weight: bold;
+            color: #007bff;
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            margin: 15px 0;
+        }
+        .button {
+            background: #007bff;
+            color: white;
+            padding: 15px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            display: inline-block;
+            margin: 20px 0;
+        }
+        .total-amount {
+            font-size: 24px;
+            font-weight: bold;
+            color: #28a745;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #666;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🛒 Purchase Confirmed!</h1>
+    </div>
+    
+    <div class="content">
+        <h2>Hi {{user_name}}!</h2>
+        
+        <p>Thank you for your purchase! Your order has been confirmed and your vouchers are ready to use.</p>
+        
+        <div class="order-summary">
+            <h3>Order Summary</h3>
+            
+            <div class="order-id">Order #{{order_id}}</div>
+            
+            <p><strong>Items Purchased:</strong></p>
+            <p>{{voucher_count}} voucher(s): {{deal_titles}}</p>
+            
+            <div class="total-amount">
+                Total: R{{total_amount}}
+            </div>
+        </div>
+        
+        <p><strong>What happens next?</strong></p>
+        <ol>
+            <li>Your vouchers have been sent to you in separate emails</li>
+            <li>Each voucher contains a unique QR code for redemption</li>
+            <li>Show the QR code at the venue to redeem your deal</li>
+            <li>Enjoy your savings! 🎉</li>
+        </ol>
+        
+        <a href="{{frontend_url}}/vouchers" class="button">View My Vouchers</a>
+        
+        <p><strong>Need Help?</strong><br>
+        If you have any questions about your purchase or need assistance, contact our support team at <a href="mailto:support@thirstybird.co.za">support@thirstybird.co.za</a></p>
+        
+        <p>Thank you for choosing ThirstyBird!<br>The ThirstyBird Team 🐦</p>
+    </div>
+    
+    <div class="footer">
+        <p>© 2024 ThirstyBird. All rights reserved.</p>
+        <p>Order #{{order_id}} | Total: R{{total_amount}}</p>
+        <p>Keep this email for your records</p>
+    </div>
+</body>
+</html>
