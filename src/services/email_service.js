@@ -82,10 +82,10 @@ class EmailService {
       };
 
       const result = await this.transporter.sendMail(mail_options);
-      console.log('✅ Email sent successfully:', result.messageId);
+      console.log('Email sent successfully:', result.messageId);
       return result;
     } catch (error) {
-      console.error('❌ Email sending failed:', error);
+      console.error('Email sending failed:', error);
       throw new Error(`Email sending failed: ${error.message}`);
     }
   }
@@ -96,7 +96,7 @@ class EmailService {
       const template_content = await fs.readFile(template_path, 'utf-8');
       return template_content;
     } catch (error) {
-      console.error(`❌ Failed to load email template: ${template_name}`, error);
+      console.error(`Failed to load email template: ${template_name}`, error);
       throw new Error(`Email template not found: ${template_name}`);
     }
   }
@@ -126,7 +126,7 @@ class EmailService {
         html_content
       );
     } catch (error) {
-      console.error('❌ Failed to send welcome email:', error);
+      console.error('Failed to send welcome email:', error);
       throw error;
     }
   }
@@ -151,7 +151,7 @@ class EmailService {
         html_content
       );
     } catch (error) {
-      console.error('❌ Failed to send voucher email:', error);
+      console.error('Failed to send voucher email:', error);
       throw error;
     }
   }
@@ -173,7 +173,7 @@ class EmailService {
         html_content
       );
     } catch (error) {
-      console.error('❌ Failed to send password reset email:', error);
+      console.error('Failed to send password reset email:', error);
       throw error;
     }
   }
@@ -196,7 +196,7 @@ class EmailService {
         html_content
       );
     } catch (error) {
-      console.error('❌ Failed to send purchase confirmation email:', error);
+      console.error('Failed to send purchase confirmation email:', error);
       throw error;
     }
   }
@@ -210,10 +210,10 @@ class EmailService {
       }
 
       await this.transporter.verify();
-      console.log('✅ Email service: Connection verified');
+      console.log('Email service: Connection verified');
       return true;
     } catch (error) {
-      console.error('❌ Email service: Connection verification failed', error);
+      console.error('Email service: Connection verification failed', error);
       return false;
     }
   }

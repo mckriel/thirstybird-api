@@ -31,11 +31,11 @@ export const run_migrations = async () => {
       const version = path.basename(file, '.sql');
       
       if (applied_set.has(version)) {
-        console.log(`⏭️  Migration ${version} already applied`);
+        console.log(`Migration ${version} already applied`);
         continue;
       }
 
-      console.log(`🔄 Running migration ${version}...`);
+      console.log(`Running migration ${version}...`);
       const sql = fs.readFileSync(path.join(migrations_path, file), 'utf8');
       
       await db.query('BEGIN');
@@ -46,16 +46,16 @@ export const run_migrations = async () => {
           [version]
         );
         await db.query('COMMIT');
-        console.log(`✅ Migration ${version} completed`);
+        console.log(`Migration ${version} completed`);
       } catch (error) {
         await db.query('ROLLBACK');
         throw error;
       }
     }
 
-    console.log('🎉 All migrations completed successfully');
+    console.log('All migrations completed successfully');
   } catch (error) {
-    console.error('❌ Migration failed:', error);
+    console.error('Migration failed:', error);
     throw error;
   }
 };
@@ -67,15 +67,15 @@ export const run_seeds = async () => {
       .sort();
 
     for (const file of seed_files) {
-      console.log(`🌱 Running seed ${file}...`);
+      console.log(`Running seed ${file}...`);
       const sql = fs.readFileSync(path.join(seeds_path, file), 'utf8');
       await db.query(sql);
-      console.log(`✅ Seed ${file} completed`);
+      console.log(`Seed ${file} completed`);
     }
 
-    console.log('🌿 All seeds completed successfully');
+    console.log('All seeds completed successfully');
   } catch (error) {
-    console.error('❌ Seeding failed:', error);
+    console.error('Seeding failed:', error);
     throw error;
   }
 };

@@ -32,9 +32,9 @@ export class AuthService {
     try {
       const user_name = `${user.first_name} ${user.last_name}`;
       await email_service.send_welcome_email(user.email, user_name);
-      console.log('✅ Welcome email sent successfully');
+      console.log('Welcome email sent successfully');
     } catch (email_error) {
-      console.error('❌ Failed to send welcome email:', email_error.message);
+      console.error('Failed to send welcome email:', email_error.message);
       // Don't fail registration if email fails
     }
 
